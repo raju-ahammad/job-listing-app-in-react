@@ -1,4 +1,5 @@
 import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core'
+import { differenceInHours } from 'date-fns'
 import React from 'react'
 
 const skils = ["react", "node", "javascript"]
@@ -29,6 +30,9 @@ const useStyles = makeStyles((theme)=> ({
 }) )
 
 const JobCard = (props) => {
+    const date = props.postedOn
+    const formatDate = differenceInHours(Date.now(), date)
+   
     const classes = useStyles()
     return (
         <Box p={2} mt={2} className={classes.wrapper}>
@@ -48,7 +52,7 @@ const JobCard = (props) => {
                 </Grid>
                 <Grid item container direction="column" alignItems="flex-end" xs> 
                 <Grid item >
-                    <Typography variant="caption">{`${props.postedOn}`} minutes ago| {props.type} | { props.location }</Typography>
+                    <Typography variant="caption">{ formatDate } minutes ago| {props.type} | { props.location }</Typography>
                 </Grid>
                 <Grid item>
                     <Box mt={2}>

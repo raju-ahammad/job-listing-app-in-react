@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Typography } from '@material-ui/core'
 import React from 'react'
 
-const Header = () => {
+const Header = ({openDialogBox}) => {
     return (
         <Box bgcolor='secondary.main' py={2} color='white'>
             <Grid container justify="center">
@@ -10,7 +10,7 @@ const Header = () => {
                         <Typography variant="h4">
                             Job UP
                         </Typography>
-                        <Button variant="contained" color="primary" disableElevation >Post A Job</Button>
+                        <Button onClick={openDialogBox} variant="contained" color="primary" disableElevation >Post A Job</Button>
                     </Box>
                 </Grid>
             </Grid>
