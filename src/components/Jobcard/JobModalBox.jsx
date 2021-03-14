@@ -82,7 +82,7 @@ const JobModalBox = ({ postJob, newJobModal, closeDialogBox }) => {
         closeModal()
     }
 
-    console.log(jobDetail);
+
 
     const classes = useStyles()
     const skills = ["javascript", "react", "node", "Mongo", "express"]

@@ -2,7 +2,7 @@ import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core'
 import { differenceInHours } from 'date-fns'
 import React from 'react'
 
-const skils = ["react", "node", "javascript"]
+
 
 const useStyles = makeStyles((theme)=> ({
     wrapper: {
