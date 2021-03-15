@@ -50,6 +50,8 @@ export default () => {
   useEffect(() => {
     fetchData()
   }, [])
+
+  
   return <ThemeProvider theme={theme} >
     <Header openDialogBox = {() => setnewJobModal(true)}  />
     <JobModalBox closeDialogBox = {() => setnewJobModal(false)} postJob={postJob} newJobModal={newJobModal} />
