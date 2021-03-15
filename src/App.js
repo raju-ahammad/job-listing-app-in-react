@@ -1,4 +1,5 @@
-import { CircularProgress, Grid, ThemeProvider } from "@material-ui/core";
+import { Box, Button, CircularProgress, Grid, ThemeProvider } from "@material-ui/core";
+import { Close } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 import Search from "./components/Body/Search";
 import { app, firestore } from "./components/firebase/config";
@@ -13,8 +14,11 @@ export default () => {
   const [jobs, setJobs] = useState([])
   const [loading, setLoading] = useState(true)
   const [newJobModal, setnewJobModal] = useState(false)
+  const [customJobSearch, setCustomJobSearch] = useState(false)
 
   const fetchData = async () => {
+    setCustomJobSearch(false)
+    setLoading(true)
     const req = await firestore.collection("jobs").orderBy("postedOn", "desc").get()
     const jobData = req.docs.map((job) => ({ ...job.data(), id: job.id, postedOn: job.data().postedOn.toDate()}))
     setJobs(jobData)
@@ -30,6 +34,19 @@ export default () => {
     
   }
 
+  const fetchCustomJob = async (jobSearch) => {
+    setLoading(true)
+    const req = await firestore.collection("jobs")
+                               .orderBy("postedOn", "desc")
+                               .where("location", "==", jobSearch.location )
+                               .where("type", "==", jobSearch.type )
+                               .get()
+    const jobData = req.docs.map((job) => ({ ...job.data(), id: job.id, postedOn: job.data().postedOn.toDate()}))
+    setJobs(jobData)
+    setLoading(false)
+    setCustomJobSearch(true)
+  }
+
   useEffect(() => {
     fetchData()
   }, [])
@@ -38,12 +55,27 @@ export default () => {
     <JobModalBox closeDialogBox = {() => setnewJobModal(false)} postJob={postJob} newJobModal={newJobModal} />
     <Grid container justify="center"> 
       <Grid item xs={10}>
-        <Search/>
+        <Search fetchCustomJob={fetchCustomJob}/>
         {
           loading ? <CircularProgress/>   
-                  : jobs.map((job) => (
+                  : (
+                    <>
+                    {
+                      customJobSearch && 
+                      (
+                        <Box>
+                          <Button onClick={fetchData}>
+                            <Close size={20} />
+                            Custom Search
+                          </Button>
+                        </Box>
+                      )
+                    }
+                    {jobs.map((job) => (
                     <JobCard key={job.id} {...job} />
-                  ))   
+                    ))}
+                    </>
+                  )
         }
         
       </Grid>

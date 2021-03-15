@@ -1,5 +1,5 @@
-import { Box, Button, makeStyles, MenuItem, Select } from '@material-ui/core'
-import React from 'react'
+import { Box, Button, CircularProgress, makeStyles, MenuItem, Select } from '@material-ui/core'
+import React, { useState } from 'react'
 
 const useStyle = makeStyles({
     wrapper: {
@@ -15,21 +15,45 @@ const useStyle = makeStyles({
     }
 })
 
-const Search = () => {
+const initialState = {
+    type: "Full time",
+    location: "Remote"
+}
+
+const Search = ({fetchCustomJob}) => {
+    const [jobSearch, setJobSearch] = useState(initialState)
+    const [loading, setLoading] = useState(false)
+    
+    const { type, location } = jobSearch
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setJobSearch({...jobSearch, [name]:value})
+    }
+
+    const onSearchHandle =async () => {
+        setLoading(true)
+        await fetchCustomJob(jobSearch)
+        setLoading(false)
+       
+    }
+   
     const classes = useStyle()
     return (
        <Box className={classes.wrapper}>
-           <Select defaultValue="Full time" disableUnderline variant="filled">
+           <Select onChange={handleChange} value={type} name="type" disableUnderline variant="filled">
                <MenuItem value="Full time" >Full time</MenuItem>
                <MenuItem value="Part tiem">Part time</MenuItem>
                <MenuItem value="Contract">Contract</MenuItem>
            </Select>
-           <Select defaultValue="Remote" disableUnderline variant="filled">
+           <Select onChange={handleChange} name="location" value={location} disableUnderline variant="filled">
                <MenuItem value="Remote" >Remote</MenuItem>
                <MenuItem value="In office">In office</MenuItem>
            </Select>
-           <Button variant="contained" color="primary" disableElevation>
-               Search A Job
+           <Button onClick={onSearchHandle} disabled={loading} variant="contained" color="primary" disableElevation>
+               {
+                   loading ? <CircularProgress color="secondary" size={22} /> : "Search A Job"
+               }
            </Button>
        </Box>
     )
