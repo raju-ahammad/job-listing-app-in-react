@@ -5,6 +5,7 @@ import Search from "./components/Body/Search";
 import { app, firestore } from "./components/firebase/config";
 import Header from './components/Header';
 import JobCard from "./components/Jobcard/JobCard";
+import JobDetails from "./components/Jobcard/JobDetails";
 import JobModalBox from "./components/Jobcard/JobModalBox";
 import theme from "./theme/theme";
 
@@ -15,6 +16,7 @@ export default () => {
   const [loading, setLoading] = useState(true)
   const [newJobModal, setnewJobModal] = useState(false)
   const [customJobSearch, setCustomJobSearch] = useState(false)
+  const [viewJob, setViewJob] = useState({})
 
   const fetchData = async () => {
     setCustomJobSearch(false)
@@ -55,6 +57,7 @@ export default () => {
   return <ThemeProvider theme={theme} >
     <Header openDialogBox = {() => setnewJobModal(true)}  />
     <JobModalBox closeDialogBox = {() => setnewJobModal(false)} postJob={postJob} newJobModal={newJobModal} />
+    <JobDetails job={viewJob} closeModalBox={ ()=> setViewJob({})}  />
     <Grid container justify="center"> 
       <Grid item xs={10}>
         <Search fetchCustomJob={fetchCustomJob}/>
@@ -74,7 +77,7 @@ export default () => {
                       )
                     }
                     {jobs.map((job) => (
-                    <JobCard key={job.id} {...job} />
+                    <JobCard key={job.id} {...job} openModal={()=> setViewJob(job)} />
                     ))}
                     </>
                   )

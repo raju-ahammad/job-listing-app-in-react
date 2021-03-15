@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme)=> ({
 const JobCard = (props) => {
     const date = props.postedOn
     const formatDate = differenceInHours(Date.now(), date)
+
+    const openDialog = props.openModal
+   
    
     const classes = useStyles()
     return (
@@ -56,7 +59,7 @@ const JobCard = (props) => {
                 </Grid>
                 <Grid item>
                     <Box mt={2}>
-                        <Button variant="outlined">Chechk</Button>
+                        <Button onClick={openDialog} variant="outlined">Chechk</Button>
                     </Box>
                 </Grid>
                 </Grid>
